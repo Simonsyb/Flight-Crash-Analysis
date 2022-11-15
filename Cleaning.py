@@ -10,9 +10,18 @@ def limit_columns():
 
 def limit_years(starting_year,df):
     i = 0
+    count = 0
+    
     while int(df.iat[i,0][-4:]) < starting_year:
         i = i + 1
-    df = df.drop(range(0,i))  
+
+    df = df.drop(range(0,i))
+
+    for j in range(df.shape[0]):
+        if 2019 == int(df.iat[j,0][-4:]):
+            count = count + 1
+
+    df = df.drop(range(df.shape[0]-count,df.shape[0]))
     return df
 
 def count_null(df):
