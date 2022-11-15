@@ -139,7 +139,6 @@ def crash_cause(df):
     final_counts.extend((fire_count,hijack_count,weather_count,shot_count,other_count,na_count))
     crashCause_df.loc[len(crashCause_df.index)] = final_counts
     crashCause_df.loc[len(crashCause_df.index)] = final_deaths
-    print(sum(final_deaths))
     return crashCause_df
 
 
