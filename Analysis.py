@@ -33,7 +33,6 @@ def crash_dates(df):
     year_brackets = []
     year_brackets_count = []
     date_column_idx = df.columns.get_loc("Date")
-    bad_data = 0
     
     while start_year < 2019:
         year_brackets.append(str(start_year) + ' - ' + str(start_year+9))
@@ -44,8 +43,6 @@ def crash_dates(df):
     for i in range(df.shape[0]):
         if pd.isnull(df.iat[i,date_column_idx]):
             pass
-        elif int(df.iat[i,date_column_idx][-4:]) > 2018 or int(df.iat[i,date_column_idx][-4:]) < 1919:
-            bad_data = bad_data +1
         elif (start_range + 10) == int(df.iat[i,date_column_idx][-4:]):
             year_brackets_count.append(count)
             count = 1
