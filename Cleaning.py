@@ -3,16 +3,17 @@ import pandas as pd
 
 base_url = "https://raw.githubusercontent.com/Simonsyb/Flight-Crash-Analysis/main/Airplane_Crashes_and_Fatalities_Since_1908_20190820105639.csv"
 
-def limit_years(starting_year):
+def limit_columns():
     df = pd.read_csv(base_url)
-    i = 0
-
-    while int(df.iat[i,0][-4:]) < starting_year:
-        i = i + 1
-
-    df = df.drop(range(0,i))  
+    df = df.drop(labels=["Flight #", "Registration", "cn/ln", "Ground"], axis=1)
     return df
 
+def limit_years(starting_year,df):
+    i = 0
+    while int(df.iat[i,0][-4:]) < starting_year:
+        i = i + 1
+    df = df.drop(range(0,i))  
+    return df
 
 def count_null(df):
     null_df = pd.DataFrame(columns=df.columns)
@@ -29,5 +30,5 @@ def count_null(df):
     return null_df
         
 
-print(count_null(limit_years(1919)))
-    
+print(count_null(limit_years(1919,limit_columns())))
+
