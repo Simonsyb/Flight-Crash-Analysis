@@ -26,7 +26,6 @@ def crash_times(df):
     crashTime_df.loc[len(crashTime_df.index)] = crashTime_count
     return crashTime_df
 
-
 def crash_dates(df):
     start_year = 1919
     start_range = 1919
@@ -45,7 +44,7 @@ def crash_dates(df):
     for i in range(df.shape[0]):
         if pd.isnull(df.iat[i,date_column_idx]):
             pass
-        elif int(df.iat[i,date_column_idx][-4:]) > 2019 or int(df.iat[i,date_column_idx][-4:]) < 1919:
+        elif int(df.iat[i,date_column_idx][-4:]) > 2018 or int(df.iat[i,date_column_idx][-4:]) < 1919:
             bad_data = bad_data +1
         elif (start_range + 10) == int(df.iat[i,date_column_idx][-4:]):
             year_brackets_count.append(count)
@@ -53,7 +52,7 @@ def crash_dates(df):
             start_range = start_range + 10
         else:
             count = count + 1
-    print(year_brackets)
-    print(year_brackets_count)     
-    print(sum(year_brackets_count))
-    print(df.shape[0])
+    year_brackets_count.append(count)
+
+    crashDate_df.loc[len(crashDate_df.index)] = year_brackets_count 
+    return crashDate_df
