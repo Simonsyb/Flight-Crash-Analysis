@@ -3,16 +3,19 @@ import pandas as pd
 
 base_url = "https://raw.githubusercontent.com/Simonsyb/Flight-Crash-Analysis/main/Airplane_Crashes_and_Fatalities_Since_1908_20190820105639.csv"
 
+
 def limit_years(starting_year):
-  
+    df = pd.read_csv(base_url)
+    i = 0
+
+    while int(df.iat[i,0][-4:]) < starting_year:
+        i = i + 1
+
+    df = df.drop(range(0,i))  
+    return df
 
 
-
-
-
-
-def count_null(url):
-    df = pd.read_csv(url)
+def count_null(df):
     null_df = pd.DataFrame(columns=df.columns)
     null_count = []
     
@@ -24,6 +27,8 @@ def count_null(url):
         null_count.append(count)
         
     null_df.loc[len(null_df.index)] = null_count
-    print(null_df)
+    return null_df
         
+
+print(count_null(limit_years(1919)))
     
