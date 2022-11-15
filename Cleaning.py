@@ -21,7 +21,7 @@ def limit_years(starting_year,df):
         if 2019 == int(df.iat[j,0][-4:]):
             count = count + 1
 
-    df = df.drop(range(df.shape[0]-count,df.shape[0]))
+    df = df.iloc[:-count,:]
     return df
 
 def count_null(df):
@@ -38,6 +38,3 @@ def count_null(df):
     null_df.loc[len(null_df.index)] = null_count
     return null_df
         
-
-print(count_null(limit_years(1919,limit_columns())))
-
