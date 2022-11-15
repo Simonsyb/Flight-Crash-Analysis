@@ -54,6 +54,48 @@ def crash_dates(df):
     crashDate_df.loc[len(crashDate_df.index)] = year_brackets_count 
     return crashDate_df
 
+
+def crash_deaths(df):
+    start_year = 1919
+    start_range = 1919
+    year_brackets = []
+    count_a = 0
+    count_d = 0
+    
+    death_df = pd.DataFrame()
+    date_column_idx = df.columns.get_loc("Date")
+    aboard_column_idx = df.columns.get_loc("Aboard")
+    death_column_idx = df.columns.get_loc("Fatalities")
+
+    aboard_count = []
+    survive_count = []
+    death_count = []
+    
+    while start_year < 2019:
+        year_brackets.append(str(start_year) + ' - ' + str(start_year+9))
+        start_year = start_year + 10
+    
+    
+    for i in range(df.shape[0]):
+        if pd.isnull(df.iat[i,aboard_column_idx]):
+            pass
+        elif (start_range + 10) == int(df.iat[i,date_column_idx][-4:]):
+            aboard_count.append(count_a)
+            death_count.append(count_d)
+            count_a = df.iat[i,aboard_column_idx]
+            count_d = df.iat[i,death_column_idx]
+            start_range = start_range + 10
+        else:
+            count_a = count_a + df.iat[i,aboard_column_idx]
+            count_d = count_d + df.iat[i,death_column_idx]
+            
+    aboard_count.append(count_a)
+    death_count.append(count_d)
+    death_df=death_df.assign(Aboard=aboard_count,Deaths=death_count,Survivors=[a - b for a, b in zip(aboard_count, death_count)])
+    death_df.index = year_brackets
+
+    return death_df
+
 def crash_operators(df):
     df_upd = df['Operator'].value_counts()
     return df_upd
@@ -61,3 +103,4 @@ def crash_operators(df):
 def crash_aircrafts(df):
     df_upd = df['AC Type'].value_counts()
     return df_upd
+
