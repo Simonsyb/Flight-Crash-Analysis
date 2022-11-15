@@ -53,3 +53,7 @@ def crash_dates(df):
 
     crashDate_df.loc[len(crashDate_df.index)] = year_brackets_count 
     return crashDate_df
+
+def crash_operators(df):
+    df_upd = df['Operator'].value_counts()
+    return df_upd
