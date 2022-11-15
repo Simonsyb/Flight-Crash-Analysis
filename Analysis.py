@@ -97,32 +97,51 @@ def crash_deaths(df):
     return death_df
 
 def crash_cause(df):
-    fire_count = 0
-    hijack_count = 0
-    weather_count = 0
-    shot_count = 0
-    other_count = 0
-    na_count = 0
-    final_counts = []
+    fire_count, fire_death = 0,0
+    hijack_count, hijack_death = 0,0
+    weather_count,weather_death = 0,0
+    shot_count,shot_death = 0,0
+    other_count,other_death = 0,0
+    na_count,na_death = 0,0
+    
+    final_counts,final_deaths = [],[]
     crashCause_df = pd.DataFrame(columns=['Fire','Hijack','Weather','Shot Down','Other','N/A'])
     summary_column_idx = df.columns.get_loc("Summary")
+    death_column_idx = df.columns.get_loc("Fatalities")
 
     for i in range(df.shape[0]):
         if pd.isnull(df.iat[i,summary_column_idx]):
             na_count = na_count+1
+            if pd.notnull(df.iat[i,death_column_idx]):   
+                na_death = na_death + df.iat[i,death_column_idx]
         elif "hijack" in df.iat[i,summary_column_idx] or "Hijack" in df.iat[i,summary_column_idx] :
             hijack_count = hijack_count + 1
+            if pd.notnull(df.iat[i,death_column_idx]):  
+                hijack_death = hijack_death + df.iat[i,death_column_idx]
         elif "shot" in df.iat[i,summary_column_idx] or "Shot" in df.iat[i,summary_column_idx] :
             shot_count = shot_count + 1
+            if pd.notnull(df.iat[i,death_column_idx]):  
+                shot_death = shot_death + df.iat[i,death_column_idx]
         elif "fire" in df.iat[i,summary_column_idx] or "Fire" in df.iat[i,summary_column_idx] :
             fire_count = fire_count + 1
+            if pd.notnull(df.iat[i,death_column_idx]):  
+                fire_death = fire_death + df.iat[i,death_column_idx]
         elif "weather" in df.iat[i,summary_column_idx] or "Weather" in df.iat[i,summary_column_idx] :
             weather_count = weather_count + 1
+            if pd.notnull(df.iat[i,death_column_idx]):  
+                weather_death =weather_death + df.iat[i,death_column_idx]
         else:
             other_count = other_count+1
+            if pd.notnull(df.iat[i,death_column_idx]):  
+                other_death = other_death + df.iat[i,death_column_idx]
+            
+    final_deaths.extend((fire_death,hijack_death,weather_death,shot_death,other_death,na_death))       
     final_counts.extend((fire_count,hijack_count,weather_count,shot_count,other_count,na_count))
     crashCause_df.loc[len(crashCause_df.index)] = final_counts
+    crashCause_df.loc[len(crashCause_df.index)] = final_deaths
+    print(sum(final_deaths))
     return crashCause_df
+
 
 def crash_operators(df):
     df_upd = df['Operator'].value_counts()
