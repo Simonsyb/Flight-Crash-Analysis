@@ -57,3 +57,7 @@ def crash_dates(df):
 def crash_operators(df):
     df_upd = df['Operator'].value_counts()
     return df_upd
+
+def crash_aircrafts(df):
+    df_upd = df['AC Type'].value_counts()
+    return df_upd
