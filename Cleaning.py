@@ -3,7 +3,6 @@ import pandas as pd
 
 base_url = "https://raw.githubusercontent.com/Simonsyb/Flight-Crash-Analysis/main/Airplane_Crashes_and_Fatalities_Since_1908_20190820105639.csv"
 
-
 def limit_years(starting_year):
     df = pd.read_csv(base_url)
     i = 0
