@@ -189,37 +189,74 @@ def aircraft_deaths(df):
 
     acDeaths_df=acDeaths_df.assign(Aircraft=ac_names,Deaths=death_counts)
     return acDeaths_df
-    
+
+#Determines the total number of crashes each operator was involved in.   
 def crash_operators(df):
     df_upd = df['Operator'].value_counts()
-    m = df['Operator'].value_counts().keys()
     return df_upd
 
+
+#Determines the total number of crashes each aircraft was involved in.   
 def crash_aircrafts(df):
     df_upd = df['AC Type'].value_counts()
     return df_upd
 
+
+#Determines the total number of crashes based on location.
 def crash_locations(df):
     df_upd = df['Location'].value_counts()
     return df_upd
 
+
 if __name__ == "__main__":
     #Determine what time of the day that planes tend to crash
+    print("The time of day that crashes happened at")
     print(crash_times(cleaning.limit_years(1919,cleaning.limit_columns())))
+    print()
     print()
 
     #Determine the number of number of crashes per 10 year intervals
+    print("The 10 year intervals with their associated count of plane crashes")
     print(crash_dates(cleaning.limit_years(1919,cleaning.limit_columns())))
+    print()
     print()
 
     #Detemines the number of people on board, the # of deaths and the # of survivors for each 10 year bracket.
+    print("The count of all passengers on board, deaths amd survivors.")
     print(crash_deaths(cleaning.limit_years(1919,cleaning.limit_columns())))
+    print()
     print()
 
     #
+    print("")
     print(crash_cause(cleaning.limit_years(1919,cleaning.limit_columns())))
     print()
+    print()
 
-    #print(limit_columns())
-    #print(limit_years(1919,limit_columns()))
-    #print(count_null(limit_years(1919,limit_columns())))
+    #
+    print("")
+    #print(operator_deaths(cleaning.limit_years(1919,cleaning.limit_columns())))
+    print()
+    print()
+
+    #
+    print("")
+    #print(aircraft_deaths(cleaning.limit_years(1919,cleaning.limit_columns())))
+    print()
+    print()
+
+    #Determine what operators crash the most often
+    print("Operators and their total number of fatalities")
+    print(crash_operators(cleaning.limit_years(1919,cleaning.limit_columns())))
+    print()
+    print()
+
+    #Determine what aircrafts crash the most often
+    print("Aircrafts and their total number of fatalities")
+    print(crash_aircrafts(cleaning.limit_years(1919,cleaning.limit_columns())))
+    print()
+    print()
+
+    #Determine what locations the most crashes happen in.
+    print("Locations with associated count of plane crashes")
+    print(crash_locations(cleaning.limit_years(1919,cleaning.limit_columns())))
