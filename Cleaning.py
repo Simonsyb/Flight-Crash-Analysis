@@ -28,7 +28,6 @@ def limit_years(starting_year,df):
         if 2019 == int(df.iat[j,0][-4:]):
             count = count + 1
     df = df.iloc[:-count,:] #Drops years after 2018   
-    
     return df
 
 
@@ -46,3 +45,9 @@ def count_null(df):
         
     null_df.loc[len(null_df.index)] = null_count
     return null_df
+
+
+if __name__ == "__main__":
+    #print(limit_columns())
+    #print(limit_years(1919,limit_columns()))
+    #print(count_null(limit_years(1919,limit_columns())))
