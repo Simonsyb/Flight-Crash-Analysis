@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+from collections import Counter
+from operator import sub
 
 base_url = "https://raw.githubusercontent.com/Simonsyb/Flight-Crash-Analysis/main/Airplane_Crashes_and_Fatalities_Since_1908_20190820105639.csv"
 
@@ -37,4 +39,3 @@ def count_null(df):
         
     null_df.loc[len(null_df.index)] = null_count
     return null_df
-        
