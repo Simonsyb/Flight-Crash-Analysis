@@ -17,15 +17,15 @@ def crash_times(df):
         if pd.isnull(df.iat[i,time_column_idx]):
             pass
         elif int(df.iat[i,time_column_idx][:2]) >= 24:
-            faulty_data = faulty_data +1
+            faulty_data += 1
         elif 0 <= int(df.iat[i,time_column_idx][:-3]) and int(df.iat[i,time_column_idx][:-3]) <= 5:
-            night_crash = night_crash +1
+            night_crash += 1
         elif 6 <= int(df.iat[i,time_column_idx][:-3]) and int(df.iat[i,time_column_idx][:-3]) <= 11:
-            morning_crash = morning_crash +1
+            morning_crash += 1
         elif 12 <= int(df.iat[i,time_column_idx][:-3]) and int(df.iat[i,time_column_idx][:-3]) <= 17:
-            afternoon_crash = afternoon_crash +1
+            afternoon_crash += 1
         elif 18 <= int(df.iat[i,time_column_idx][:-3]) and int(df.iat[i,time_column_idx][:-3]) <= 23:
-            evening_crash = evening_crash +1
+            evening_crash += 1
 
     crashTime_count.extend([morning_crash,afternoon_crash,evening_crash,night_crash,faulty_data])        
     crashTime_df.loc[len(crashTime_df.index)] = crashTime_count
@@ -44,7 +44,7 @@ def crash_dates(df):
     #Creates a list containing the brackets.
     while start_year < 2019:
         year_brackets.append(str(start_year) + ' - ' + str(start_year+9))
-        start_year = start_year + 10     
+        start_year += 10     
 
     #Creates a list of the # of crashes in 10 year intervals.
     for i in range(df.shape[0]):
@@ -53,9 +53,9 @@ def crash_dates(df):
         elif (interval + 10) == int(df.iat[i,date_column_idx][-4:]):
             crash_count.append(count)
             count = 1
-            interval = interval + 10
+            interval += 10
         else:
-            count = count + 1
+            count += 1
     crash_count.append(count)
 
     #Combine our two lists into a DF
@@ -79,7 +79,7 @@ def crash_deaths(df):
     
     while start_year < 2019:
         year_brackets.append(str(start_year) + ' - ' + str(start_year+9))
-        start_year = start_year + 10
+        start_year += 10
 
     #Counts the number of people on board and deaths that occured.
     for i in range(df.shape[0]):
@@ -90,7 +90,7 @@ def crash_deaths(df):
             death_count.append(count_d)
             count_a = df.iat[i,aboard_column_idx]
             count_d = df.iat[i,death_column_idx]
-            interval = interval + 10
+            interval += 10
         else:
             count_a = count_a + df.iat[i,aboard_column_idx]
             count_d = count_d + df.iat[i,death_column_idx]
@@ -102,7 +102,8 @@ def crash_deaths(df):
     return death_df
 
 
-
+#Determines the number of plane crashes and fatalities that were caused by fire, a hijacking,
+#weather, shot down, other or N/A
 def crash_cause(df):
     fire_count, fire_death = 0,0
     hijack_count, hijack_death = 0,0
@@ -110,38 +111,40 @@ def crash_cause(df):
     shot_count,shot_death = 0,0
     other_count,other_death = 0,0
     na_count,na_death = 0,0
-    
     final_counts,final_deaths = [],[]
-    crashCause_df = pd.DataFrame(columns=['Fire','Hijack','Weather','Shot Down','Other','N/A'])
+
     summary_column_idx = df.columns.get_loc("Summary")
     death_column_idx = df.columns.get_loc("Fatalities")
+    crashCause_df = pd.DataFrame(columns=['Fire','Hijack','Weather','Shot Down','Other','N/A'])
 
+    #Sorts each crash situation into one of the 6 catagories
     for i in range(df.shape[0]):
         if pd.isnull(df.iat[i,summary_column_idx]):
-            na_count = na_count+1
+            na_count +=1
             if pd.notnull(df.iat[i,death_column_idx]):   
-                na_death = na_death + df.iat[i,death_column_idx]
-        elif "hijack" in df.iat[i,summary_column_idx] or "Hijack" in df.iat[i,summary_column_idx] :
-            hijack_count = hijack_count + 1
+                na_death += df.iat[i,death_column_idx]
+        elif "hijack" in df.iat[i,summary_column_idx].lower():
+            hijack_count += 1
             if pd.notnull(df.iat[i,death_column_idx]):  
-                hijack_death = hijack_death + df.iat[i,death_column_idx]
-        elif "shot" in df.iat[i,summary_column_idx] or "Shot" in df.iat[i,summary_column_idx] :
-            shot_count = shot_count + 1
+                hijack_death += df.iat[i,death_column_idx]
+        elif "shot" in df.iat[i,summary_column_idx].lower():
+            shot_count += 1
             if pd.notnull(df.iat[i,death_column_idx]):  
-                shot_death = shot_death + df.iat[i,death_column_idx]
-        elif "fire" in df.iat[i,summary_column_idx] or "Fire" in df.iat[i,summary_column_idx] :
-            fire_count = fire_count + 1
+                shot_death += df.iat[i,death_column_idx]
+        elif "fire" in df.iat[i,summary_column_idx].lower():
+            fire_count += 1
             if pd.notnull(df.iat[i,death_column_idx]):  
-                fire_death = fire_death + df.iat[i,death_column_idx]
-        elif "weather" in df.iat[i,summary_column_idx] or "Weather" in df.iat[i,summary_column_idx] :
-            weather_count = weather_count + 1
+                fire_death += df.iat[i,death_column_idx]
+        elif "weather" in df.iat[i,summary_column_idx].lower(): 
+            weather_count += 1
             if pd.notnull(df.iat[i,death_column_idx]):  
-                weather_death =weather_death + df.iat[i,death_column_idx]
+                weather_death += df.iat[i,death_column_idx]
         else:
-            other_count = other_count+1
+            other_count += 1
             if pd.notnull(df.iat[i,death_column_idx]):  
-                other_death = other_death + df.iat[i,death_column_idx]
-            
+                other_death += df.iat[i,death_column_idx]
+                
+    #Combines the two lists ands adds them into our DF as well as lables for our indexs.       
     final_deaths.extend((fire_death,hijack_death,weather_death,shot_death,other_death,na_death))       
     final_counts.extend((fire_count,hijack_count,weather_count,shot_count,other_count,na_count))
     crashCause_df.loc[len(crashCause_df.index)] = final_counts
@@ -149,28 +152,28 @@ def crash_cause(df):
     crashCause_df.index = ['# of crashes','Fatalities']
     return crashCause_df
 
+
+#Gives you the operator and the coresponding # of fatalities of that have occured on their flights.
 def operator_deaths(df):
     df_upd = df['Operator'].value_counts()
     optor = df['Operator'].value_counts().keys()
     opDeaths_df = pd.DataFrame(columns=['Operator','Deaths'])
-    death_counts = []
-    operator_names = []
-    
+    operator_names, death_counts = [], []
+
+    #Creates a list of the number of fatalities
     for i in range(len(optor)):
         count = df.loc[df['Operator'] == optor[i], 'Fatalities'].sum()
         death_counts.append(count)
-        
+
+    #Creates a list of operator names   
     for i in range(len(optor)):
         operator_names.append(optor[i])
-
-    print(len(operator_names))
-    print(len(death_counts))
-    print(opDeaths_df)
 
     opDeaths_df=opDeaths_df.assign(Operator=operator_names,Deaths=death_counts)
     return opDeaths_df
 
 
+#Gives you the aircraft type and the coresponding # of fatalities of that have occured on it.
 def aircraft_deaths(df):
     df_upd = df['AC Type'].value_counts()
     ac_type = df['AC Type'].value_counts().keys()
@@ -185,10 +188,10 @@ def aircraft_deaths(df):
     for i in range(len(ac_type)):
         ac_names.append(ac_type[i])
 
-    print(acDeaths_df)
 
     acDeaths_df=acDeaths_df.assign(Aircraft=ac_names,Deaths=death_counts)
     return acDeaths_df
+
 
 #Determines the total number of crashes each operator was involved in.   
 def crash_operators(df):
@@ -227,21 +230,21 @@ if __name__ == "__main__":
     print()
     print()
 
-    #
-    print("")
+    #Classifies the reason for the crash into catagories. Gives total count and # of fatalities for each reason.
+    print("Categorizes the reason for each crash as well as the number of fatalities.")
     print(crash_cause(cleaning.limit_years(1919,cleaning.limit_columns())))
     print()
     print()
 
-    #
-    print("")
-    #print(operator_deaths(cleaning.limit_years(1919,cleaning.limit_columns())))
+    #Compares operators to fatalities
+    print("The number of fatalities of each operator")
+    print(operator_deaths(cleaning.limit_years(1919,cleaning.limit_columns())))
     print()
     print()
 
-    #
-    print("")
-    #print(aircraft_deaths(cleaning.limit_years(1919,cleaning.limit_columns())))
+    #Compares aircraft model to fatalities
+    print("Aircraft type and the number of fatalities that have occured while on board")
+    print(aircraft_deaths(cleaning.limit_years(1919,cleaning.limit_columns())))
     print()
     print()
 
