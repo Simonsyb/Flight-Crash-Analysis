@@ -249,13 +249,13 @@ if __name__ == "__main__":
     print()
 
     #Determine what operators crash the most often
-    print("Operators and their total number of fatalities")
+    print("Operators and their total number of crashes")
     print(crash_operators(cleaning.limit_years(1919,cleaning.limit_columns())))
     print()
     print()
 
     #Determine what aircrafts crash the most often
-    print("Aircrafts and their total number of fatalities")
+    print("Aircrafts and their total number of crashes")
     print(crash_aircrafts(cleaning.limit_years(1919,cleaning.limit_columns())))
     print()
     print()
